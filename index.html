@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Image Gallery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      background-color: #333;
+      color: #fff;
+    }
+
+    .filters {
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .filters button {
+      padding: 0.5rem 1rem;
+      margin: 0.2rem;
+      border: none;
+      background: #555;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .filters button:hover {
+      background: #222;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 1rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      filter: brightness(85%);
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+    }
+
+    .lightbox .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .lightbox button {
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      background: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .lightbox img {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>My Image Gallery</h1>
+  </header>
+
+  <div class="filters">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('city')">City</button>
+    <button onclick="filterImages('animals')">Animals</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <img src="C:\Users\venug\Downloads\codealpha\nature.jpg" data-category="nature" onclick="openLightbox(0)">
+    <img src="C:\Users\venug\Downloads\codealpha\city.jpeg" data-category="city" onclick="openLightbox(1)">
+    <img src="C:\Users\venug\Downloads\codealpha\animal.jpeg" data-category="animals" onclick="openLightbox(2)">
+    <img src="C:\Users\venug\Downloads\codealpha\nature2.jpeg" data-category="nature" onclick="openLightbox(3)">
+    <img src="C:\Users\venug\Downloads\codealpha\city2.jpeg" data-category="city" onclick="openLightbox(4)">
+    <img src="C:\Users\venug\Downloads\codealpha\animal2.jpeg" data-category="animals" onclick="openLightbox(5)">
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" src="" alt="lightbox image">
+    <div class="controls">
+      <button onclick="prevImage()">⟨ Prev</button>
+      <button onclick="closeLightbox()">Close</button>
+      <button onclick="nextImage()">Next ⟩</button>
+    </div>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll(".gallery img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightbox.style.display = "flex";
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    function filterImages(category) {
+      images.forEach(img => {
+        const imgCategory = img.getAttribute('data-category');
+        img.style.display = (category === 'all' || imgCategory === category) ? "block" : "none";
+      });
+    }
+
+    // Optional: Close lightbox on ESC key
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
